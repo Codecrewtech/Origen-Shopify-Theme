@@ -1,0 +1,85 @@
+{% for option in product.options_with_values %}
+               
+                   {% if section.settings.variantdesign == 'variantradio' %}
+                 {% if section.settings.variantswatch == true %}
+                   <div class="variantradio"> {% if option.name == 'Color' %}
+                    <label>{{ option.name }}</label>
+                    {% assign index = forloop.index %}
+					 {% assign values = '' %}    
+                {% assign option_index = forloop.index0 %}
+				{% for variant in product.variants %}                      
+                     <div class="variantradiolabel">
+
+{% assign value = variant.options[option_index] %}
+{% unless values contains value %}
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %}
+      {% assign values = values | split: ',' %}                   
+    <input class="single-option-selector single-option-selector-{{ section.id }}" 
+           type="radio" name="color" id="color-{{ forloop.index }}" data-index="option{{index}}" 
+           value="{{ value }}" {% if option.selected_value == value %} checked {% endif %}>
+                    <label for="color-{{ forloop.index }}">
+                  <img src="{{ variant.image | img_url: '100X100' }}"/>                   
+                    </label>                   
+                    {% endunless %}
+                     </div>   {% endfor %}
+                </div>
+ {% else %}
+                <div class="variantradio">
+                    <label>{{ option.name }}</label>                  
+                {% assign index = forloop.index %}
+
+{% for value in option.values %}
+                   <div class="variantradiolabel">
+  <input class="single-option-selector single-option-selector-{{ section.id }}" 
+           type="radio" name="{{ option.name }}" id="{{ option.name }}-{{ forloop.index }}" data-index="option{{index}}" 
+           value="{{ value }}" {% if option.selected_value == value %} checked {% endif %}>
+                    <label for="{{ option.name }}-{{ forloop.index }}">
+                      {{ value }}                    </label> </div>                  
+                    {% endfor %}          
+                </div>                {% endif %}
+
+                {% endif %}
+                 {% endif %}
+                 {% if section.settings.variantdesign == 'variantdropdown' %}
+                 {% if section.settings.variantswatch == true %}
+                   <div class="variantradio"> {% if option.name == 'Color' %}
+                    <label>{{ option.name }}</label>
+                    {% assign index = forloop.index %}
+					 {% assign values = '' %}    
+                {% assign option_index = forloop.index0 %}
+				{% for variant in product.variants %}                      
+                     <div class="variantradiolabel">
+
+{% assign value = variant.options[option_index] %}
+{% unless values contains value %}
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %}
+      {% assign values = values | split: ',' %}                   
+    <input class="single-option-selector single-option-selector-{{ section.id }}" 
+           type="radio" name="color" id="color-{{ forloop.index }}" data-index="option{{index}}" 
+           value="{{ value }}" {% if option.selected_value == value %} checked {% endif %}>
+                    <label class="tooltip" for="color-{{ forloop.index }}">
+                  <img src="{{ variant.image | img_url: '100X100' }}"/> 
+                      <span class="tooltiptext">{{ value }}</span>
+                    </label>                   
+                    {% endunless %}
+                     </div>   {% endfor %}
+                </div>
+ {% else %}
+                <div class="selector-wrapper js product-form__item">
+                    <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+                      {{ option.name }}
+                    </label>
+                    <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input"
+                      id="SingleOptionSelector-{{ forloop.index0 }}"
+                      data-index="option{{ forloop.index }}"
+                    >
+                      {% for value in option.values %}
+                        <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                      {% endfor %}
+                    </select>
+                   
+                  </div> 
+               {% endif %}    {% endif %}    {% endif %}
+                {% endfor %}

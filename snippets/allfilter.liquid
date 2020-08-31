@@ -1,0 +1,156 @@
+{% if section.settings.show_category == true  %}
+{% if section.settings.filterbycategory != blank %}
+ <h3 id="aside_header" class="head">{{ section.settings.filterbycategory }}</h3>
+{% endif %}
+{% assign currentCol = collection.handle %}
+<div class="collectionss">
+{% for collection in collections %}
+      {% if collection.image %}
+       <a class="m_P {% if collection.handle contains currentCol %} active {% endif %}" href="{{ collection.url }}"> 
+<h3 style="color:{{ section.settings.collectioncolor }};font-size:{{ section.settings.collectiontitlefontsize }}px;">
+  {% if section.settings.show_category_image == true %}
+  <img src="{{ collection | img_url: '50X50' }}" alt="{{ collection.image.alt }}" /> 
+  {% endif %}
+  {{ collection.title }}</h3>
+</a> {% else %}
+         <a class="m_P {% if collection.handle contains currentCol %} active {% endif %}" href="{{ collection.url }}"> 
+<h3 style="color:{{ section.settings.collectioncolor }};font-size:{{ section.settings.collectiontitlefontsize }}px">
+   {% if section.settings.show_category_image == true %}
+  <img src="{{ collection.products.first | img_url: '50x50' }}" alt="{{ collection.title | escape  }}" /> 
+  {% endif %}
+  {{ collection.title }}</h3>
+</a> {% endif %}
+{% endfor %}
+</div>
+{% endif %}
+
+
+{% if section.settings.show_tags == true %}
+{% comment %}
+  A loop to catch and filter out the different tag categories.
+  This is mainly for advanced tagging, but will also help us strip
+  out any tag categories from our tags (E.g. remove BRAND_ from BRAND_tag)
+{% endcomment %}
+
+
+{% if template contains 'collection' and collection.all_tags.size > 0 %}
+  {% assign categories = '' %}
+  {% for tag in collection.all_tags %}
+    {% if tag contains '_' %}
+      {% capture categories %}{% unless categories == blank  %}{{ categories }}|{% endunless %}{{ tag | split: '_' | first }}{% endcapture %}
+    {% endif %}
+  {% endfor %}
+  {% assign cat_array = categories | split: '|' | uniq %}
+{% endif %}
+
+  {% if collection.all_tags.size > 0 %}
+
+    <div class="grid-uniform">
+      {% comment %}
+        Loop through tag categories
+      {% endcomment %}
+      {% for cat_item in cat_array %}
+        <div class="grid-item small--one-half medium--one-third">
+          <h3 id="aside_header" class="head">Filter By  {{ cat_item }}</h3>
+          <ul class="advanced-filters">
+            {% comment %}
+              Loop through collection tags
+            {% endcomment %}
+            {% for tag in collection.all_tags %}
+              {% assign cat = tag | split: '_' | first %}              
+              {% if cat != tag and cat_item == cat %}
+                {% comment %}
+                  Strip out tag category prefix and add/remove link for tag filtering
+                {% endcomment %}
+                {% if current_tags contains tag %}
+            
+                  <li class="advanced-filter active-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}">{{ tag | remove_first: cat_item | remove_first: '_' | link_to_remove_tag: tag }}</li>
+                {% else %}
+                  <li class="advanced-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}">{{ tag | remove_first: cat_item | remove_first: '_' | link_to_add_tag: tag }}</li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+{% endif %}
+
+{% endif %}
+
+
+<!-- Filter by Type -->
+{% if section.settings.show_type == true %}
+{% if section.settings.filterbytypetitle != blank %}
+ <h3 id="aside_header" class="head">{{ section.settings.filterbytypetitle }}</h3>
+{% endif %}
+
+<div class="block" style="margin-bottom:20px;">
+    
+      <div class="block-content clear-wrap">
+        <ul class="filter-list filter-text">
+        
+          {% for product_type in shop.types %}
+           {% comment %} "unless" used below to remove UNKNOWN TYPE from displaying {% endcomment %}
+    {% unless forloop.first %} 
+    <li class="advanced-filter {% if collection.current_type == product_type %}active-filter" {% endif %} data-group="{{ product_type }}" data-handle="{{ product_type }}" data-filter="{{ product_type }}">{{ product_type | link_to_type }}</li>
+{% endunless %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+{% endif %}
+    <script>
+      
+    $(function() {
+      var filters = $('.advanced-filter'),
+        el,
+        elGroup,
+        elHandle,
+        activeTagInGroup;
+        
+      filters.on('click', function(e) {
+        el = $(this);
+        elGroup = el.data('group');
+        elHandle = el.data('handle');
+        activeTagInGroup = $('.active-filter[data-group="'+ elGroup +'"]');
+        // If the tag clicked is not already active and its group contains an active tag, we will swap tag within the group.
+        if ( !el.hasClass('active-filter')  && activeTagInGroup.size() ) {
+          e.preventDefault();
+          location.href = location.href.replace(activeTagInGroup.data('handle'), elHandle);
+        }
+      });
+    });
+    </script>
+
+ 
+  {% if section.settings.imageround == true  %}
+<style>
+.m_P img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+</style>
+
+{% endif %}
+ <style>
+.m_P img {
+    width: 50px;
+    height: 50px;
+    margin-right: 9px;
+}
+   .m_P{
+     padding:10px;
+   }
+   .active{
+     background:{{ section.settings.activecollection }};
+     border-radius:5px;
+     padding:10px;
+     color:{{ section.settings.activecolorcollection }}!important;
+   }
+   .active h3{
+         color:{{ section.settings.activecolorcollection }}!important;
+ 
+   }
+</style>

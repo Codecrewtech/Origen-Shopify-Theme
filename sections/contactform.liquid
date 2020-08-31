@@ -1,0 +1,133 @@
+{% if section.settings.show_left_section == true %}
+{% if section.settings.topsection != blank %}
+<div class="top_sec">
+  {{ section.settings.topsection }}
+</div>
+{% endif %}
+<ul class="left_align">
+  <li><strong>{{ section.settings.address_label }}</strong>:{{ section.settings.address }}</li>
+  <li><strong>{{ section.settings.phone_label }}</strong>:<a href="tel:{{ section.settings.Phone_number }}">{{ section.settings.Phone_number }}</a></li>
+  <li><strong>{{ section.settings.email_label }}</strong>:<a href="mailto:{{ section.settings.email_address }}">{{ section.settings.email_address }}</a></li>
+</ul>
+{% endif %}
+{% if section.settings.embed_googlemap != blank %}
+{{ section.settings.embed_googlemap }}
+{% endif %}
+{% schema %}
+  {
+    "name": "Contact Form",
+    "settings": [
+	{
+    "type":"checkbox",
+    "id":"show_left_section",
+    "label": "Show Left",
+    "default":true
+    },
+{
+    "type":"textarea",
+    "id":"topsection",
+    "label": "Top Section",
+    "default":"TOp Section"
+    },
+{
+    "type":"textarea",
+    "id":"embed_googlemap",
+    "label": "Embed Google Map"
+    },
+   {
+    "type":"text",
+    "id":"address_label",
+    "label":"Address Label",
+    "default":"Address"
+    },
+    {
+    "type":"textarea",
+    "id":"address",
+    "label":"Address",
+    "default":"123, Abc Lane Xyz 12345"
+    },
+    {
+    "type":"text",
+    "id":"phone_label",
+    "label":"Phone Label",
+    "default":"Phone"
+    },
+    {
+    "type":"textarea",
+    "id":"Phone_number",
+    "label":"Phone Number",
+    "default":"123-456-7890"
+    },
+ 	{
+    "type":"text",
+    "id":"email_label",
+    "label":"Email Label",
+    "default":"Email"
+    },
+    {
+    "type":"textarea",
+    "id":"email_address",
+    "label":"Email Address",
+    "default":"info@domain.com"
+    },
+ {
+    "type":"range",
+    "id":"spacing_top",
+    "label":"Spacing From top",
+    "min":0,
+    "max":100,
+    "default":0,
+    "step":1,
+    "info":"put value in pixcel"
+    },
+    {
+    "type":"range",
+    "id":"spacing_bottom",
+    "label":"Spacing From Bottom",
+    "min":0,
+    "max":100,
+    "default":0,
+    "step":1,
+    "info":"put value in pixcel"
+    }
+
+   ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+{% if section.settings.show_left_section == true %}
+<style>
+.contact-form.form-vertical {
+    width: 48%;
+    display: inline-block;
+}
+  .contact_form_left{
+    padding-right:20px;
+    width: 48%;vertical-align:top;
+    display: inline-block;
+}ul.left_align {
+  margin-bottom:20px;
+    margin-top: 20px;
+}
+ .main-content .page-width{max-width:100%;padding:0;}
+  @media(max-width:768px){
+    .contact-form.form-vertical {
+    width: 100%;
+    display:block;
+}
+  .contact_form_left{
+    padding-right:0;
+    width: 100%;
+    display:block;
+}
+  .grid--half-gutters>.grid__item {
+    padding-left: 0;
+}  
+  }
+</style>
+{% endif %}

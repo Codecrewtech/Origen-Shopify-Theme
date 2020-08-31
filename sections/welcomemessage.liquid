@@ -1,0 +1,167 @@
+<div class="welcomemsg">
+<div class="middletext{% if section.settings.zoom_image == true %} zoomimg {% endif %}">
+<div class="section-headers style-v3">
+<h2 class="section-title">{{ section.settings.heading }}&nbsp;<span class="f-color">{{ section.settings.highlight_heading }}</span></h2>
+</div>
+  <div class="new">{{ section.settings.highlight_content }}</div>
+  {% if section.settings.highlight_image != blank %}
+  <img src="{{ section.settings.highlight_image | img_url:'' }}" alt={{ image.alt }}/>
+  {% else %}
+    {{ 'dogin.jpg' | asset_url | img_tag: 'dog_new' }}
+  {% endif %}
+</div>
+  <div class="secondarea {% if section.settings.zoom_image == true %} zoomimg {% endif %}">
+    {% for block in section.blocks %}
+<div class="welcome-info-item">
+<div class="entry_two">
+<figure class="entry-thumbnail"><a href="{{ block.settings.benefits_url }}" target="_blank">
+  {% if block.settings.stepsimages != blank %}
+  <img class="attachment-fullsize size-fullsize " src="https://www.boredcesar.com/wp-content/uploads/2018/01/dog3.jpg" alt="" width="110" height="110"><br>
+{% else %}
+  {{ 'dog3.jpg' | asset_url | img_tag: 'dog_new' }}
+  {% endif %}
+  </a>
+  </figure>
+<div class="entry-body">
+  <h3 class="entry-title"><a href="{{ block.settings.benefits_url }}" target="_blank">{{ block.settings.heading_point }}</a></h3>
+  <div class="entry-content"><a href="{{ block.settings.benefits_url }}" target="_blank">{{ block.settings.content_steps }}</a></div>
+</div>
+</div>
+</div>
+    {% endfor %}
+  </div>
+</div>
+<style>
+  .f-color{
+    color:{{ section.settings.highlight_color }};
+    
+  }
+  .section-headers:after {
+    border-color:{{ section.settings.highlight_color }};
+    background:{{ section.settings.highlight_color }};
+}
+  .entry-title{
+    font-size:{{ section.settings.steps_font }}px;
+  }
+  
+  .section-title{font-size:{{ section.settings.heading_font }}px;
+</style>
+
+{% schema %}
+  {
+    "name": "Welcome Message",
+ "max_blocks": 3,
+    "settings": [
+    {
+    "type":"text",
+    "id":"heading",
+    "label":"Heading",
+    "default":"Welcome to"
+    },
+    {
+    "type":"text",
+    "id":"highlight_heading",
+    "label":"Highlight Heading",
+    "default":"Bored Cesar"
+    },
+   {
+    "type":"richtext",
+    "id":"highlight_content",
+    "label":"Content",
+    "default":"<p>face if you own a dog.</p>"
+      },
+    {
+    "type":"image_picker",
+    "id":"highlight_image",
+    "label":"Image",
+   "info":"800 By 320px"
+   },
+    {
+        "type":"checkbox",
+        "id":"zoom_image",
+        "label":"Zome Image on hover",
+    "default":true
+    },
+    {
+    "type":"header",
+    "content":"Color"
+    },
+   {
+    "type":"color",
+    "label":"Highlight Color",
+    "id":"highlight_color",
+    "default":"#000000"
+    },
+    {
+    "type":"header",
+    "content":"Font Size"
+    },
+   {
+    "type":"range",
+    "min":16,
+"max":70,
+"step":1,
+"default":40,
+"id":"heading_font",
+"label":"Heading Font Size",
+"info":"px"
+},
+ {
+    "type":"range",
+    "min":16,
+"max":40,
+"step":1,
+"default":20,
+"id":"steps_font",
+"label":"Steps Font Size",
+"info":"px"
+}
+],
+"blocks":[
+{
+      "type": "text", 
+      "name": "Welcome Points",
+      "settings": [
+       {
+          "type": "image_picker",
+          "id": "stepsimages",
+          "label": "Image",
+          "info":"110 By 110"
+        },
+        {
+          "type": "textarea",
+          "id": "heading_point",
+          "label": "Heading",
+          "default": "GUIDANCE FOR FEEDING A NEW PUPPY"
+        },
+        {
+          "type": "richtext",
+          "id": "content_steps",
+          "label": "Content",
+"default": "<p>The nutrients requirement is higher in a new puppy as it will set up the foundation of his life. The dog-owner needs to pay more attention on his diet during this period.</p>"
+        },
+         {
+          "type": "url",
+          "id": "benefits_url",
+          "label": "Link"
+        }
+      ]
+    }
+],
+ "presets":[
+{
+"name":"Welcome Message"
+
+
+}
+
+
+ ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
